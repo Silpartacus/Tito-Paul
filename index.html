@@ -145,6 +145,12 @@ button{
 
   <div class="question">Will you be my Ninong? 🤎</div>
 
+  <div class="name-wrap">
+    <label class="name-label" for="guestName">Before you answer, may I know your name? 😊</label>
+    <input id="guestName" type="text" maxlength="60" placeholder="Type your name here" autocomplete="name">
+    <div id="nameError"></div>
+  </div>
+
   <div class="buttons" id="buttonArea">
     <button id="yes">YES! 🥰</button>
     <button id="no">NO 😅</button>
@@ -155,7 +161,7 @@ button{
 
   <section id="success">
     <div style="font-size:54px">🎉🌿🦁🌿🎉</div>
-    <h2>Yay!</h2>
+    <h2 id="successTitle">Yay!</h2>
     <p>I knew you'd say YES! 🥰<br>Thank you for accepting this very special role in my life.</p>
     <img src="joco-safari.jpg" alt="Baby Joco">
     <p><strong>Love, Baby Joco 🤎</strong></p>
@@ -165,12 +171,13 @@ button{
 <script>
 const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz4lnUZUxbZXdNrgnN3vNHwy9xmy9MTtYWz4TMDH3EQrY5fa4exDSwOyno5tvyqss7ykA/exec";
 
-function saveResponse(answer){
+function saveResponse(answer, name){
   if(!GOOGLE_SCRIPT_URL || GOOGLE_SCRIPT_URL.includes("PASTE_YOUR")){
     console.warn("Google Apps Script URL has not been added yet.");
     return;
   }
   const params = new URLSearchParams({
+    name: name,
     answer: answer,
     invitation: "Baby Joco - Ninong Invitation",
     sent_at: new Date().toISOString()
@@ -183,6 +190,8 @@ const area=document.getElementById('buttonArea');
 const noBtn=document.getElementById('no');
 const yesBtn=document.getElementById('yes');
 const success=document.getElementById('success');
+const guestName=document.getElementById('guestName');
+const nameError=document.getElementById('nameError');
 
 function moveNo(e){
   if(e)e.preventDefault();
@@ -199,7 +208,15 @@ function moveNo(e){
 });
 
 yesBtn.addEventListener('click',()=>{
-  saveResponse("YES");
+  const name = guestName.value.trim();
+  if(!name){
+    nameError.textContent = "Please enter your name first. 😊";
+    guestName.focus();
+    return;
+  }
+  nameError.textContent = "";
+  saveResponse("YES", name);
+  document.getElementById("successTitle").textContent = "Yay, " + name + "!";
   success.style.display='block';
   const icons=['🎉','🤎','🌿','🦁','🐘','🦒','🦓','🐒'];
   for(let i=0;i<30;i++){
