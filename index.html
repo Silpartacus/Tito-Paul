@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Baby Joco • Tito Paul</title>
+<title>Baby Joco • Ninong Invitation</title>
 <style>
 *{box-sizing:border-box}
 html,body{margin:0;min-height:100%;font-family:Arial,Helvetica,sans-serif}
@@ -133,7 +133,7 @@ button{
 <body>
 <main class="card">
   <div class="kicker">🌿 A LITTLE SAFARI QUESTION 🌿</div>
-  <h1>Tito Paul,<span>will you be my Ninong?</span></h1>
+  <h1>Hi!<span>will you be my Ninong?</span></h1>
 
   <img class="photo" src="joco-safari.jpg" alt="Baby Joco">
 
@@ -155,7 +155,7 @@ button{
 
   <section id="success">
     <div style="font-size:54px">🎉🌿🦁🌿🎉</div>
-    <h2>Yay, Tito Paul!</h2>
+    <h2>Yay!</h2>
     <p>I knew you'd say YES! 🥰<br>Thank you for accepting this very special role in my life.</p>
     <img src="joco-safari.jpg" alt="Baby Joco">
     <p><strong>Love, Baby Joco 🤎</strong></p>
@@ -163,6 +163,22 @@ button{
 </main>
 
 <script>
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz4lnUZUxbZXdNrgnN3vNHwy9xmy9MTtYWz4TMDH3EQrY5fa4exDSwOyno5tvyqss7ykA/exec";
+
+function saveResponse(answer){
+  if(!GOOGLE_SCRIPT_URL || GOOGLE_SCRIPT_URL.includes("PASTE_YOUR")){
+    console.warn("Google Apps Script URL has not been added yet.");
+    return;
+  }
+  const params = new URLSearchParams({
+    answer: answer,
+    invitation: "Baby Joco - Ninong Invitation",
+    sent_at: new Date().toISOString()
+  });
+  const beacon = new Image();
+  beacon.src = GOOGLE_SCRIPT_URL + "?" + params.toString() + "&_=" + Date.now();
+}
+
 const area=document.getElementById('buttonArea');
 const noBtn=document.getElementById('no');
 const yesBtn=document.getElementById('yes');
@@ -183,6 +199,7 @@ function moveNo(e){
 });
 
 yesBtn.addEventListener('click',()=>{
+  saveResponse("YES");
   success.style.display='block';
   const icons=['🎉','🤎','🌿','🦁','🐘','🦒','🦓','🐒'];
   for(let i=0;i<30;i++){
